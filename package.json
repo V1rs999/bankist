@@ -1,0 +1,19 @@
+{
+  "name": "bankist",
+  "version": "1.0.0",
+  "description": "mini-site for bank",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/V1rs999/bankist.git"
+  },
+  "author": "Roman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/V1rs999/bankist/issues"
+  },
+  "homepage": "https://github.com/V1rs999/bankist#readme"
+}

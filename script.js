@@ -74,3 +74,45 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+const displayMovements = function (movements) {
+  containerMovements.innerHTML = "";
+  movements.forEach(function (value, index) {
+    const type = value > 0 ? "deposit" : "withdrawal";
+    const html = `
+            <div class="movements__row">
+            <div class="movements__type movements__type--${type}">${
+      index + 1
+    }${type}</div>
+<!--            <div class="movements__date">3 days ago</div>-->
+            <div class="movements__value">${value}</div>
+        </div>
+    `;
+    containerMovements.insertAdjacentHTML("afterbegin", html);
+  });
+};
+displayMovements(account1.movements);
+
+const displayCurrentBalance = function (movements) {
+  labelBalance.textContent = movements.reduce((a, b) => a + b);
+};
+displayCurrentBalance(account1.movements);
+//! Code challenge #1
+// const dogsJulia = [3, 5, 2, 12, 7];
+// const dogsKate = [4, 1, 15, 8, 3];
+// const checkDogs = function (dogsJulia, dogsKate) {
+//   const dogs = [...dogsJulia.slice(1, dogsJulia.length - 2), ...dogsKate];
+//   dogs.forEach(function (value, index, array) {
+//     const type = value > 3 ? "adult" : "puppy";
+//     if (value > 3) {
+//       console.log(
+//         `Dog number ${index} is an ${type}, and is ${value} years old`
+//       );
+//     } else {
+//       console.log(`Dog number ${index} is still a ${type}🐶`);
+//     }
+//   });
+// };
+// checkDogs(dogsJulia, dogsKate);
+// !Max value
+// console.log(movements.reduce((acc, mov) => (acc > mov ? acc : mov)));
+// console.log(Math.max(...movements))
