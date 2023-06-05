@@ -96,9 +96,21 @@ const displayCurrentBalance = function (movements) {
   labelBalance.textContent = movements.reduce((a, b) => a + b);
 };
 displayCurrentBalance(account1.movements);
+// !add property for object accounts "username"
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(" ")
+      .map((name) => name.at(0))
+      .join("");
+  });
+};
+createUsernames(accounts);
+console.log(accounts);
 //! Code challenge #1
-// const dogsJulia = [3, 5, 2, 12, 7];
-// const dogsKate = [4, 1, 15, 8, 3];
+let dogsJulia = [3, 5, 2, 12, 7];
+let dogsKate = [4, 1, 15, 8, 3];
 // const checkDogs = function (dogsJulia, dogsKate) {
 //   const dogs = [...dogsJulia.slice(1, dogsJulia.length - 2), ...dogsKate];
 //   dogs.forEach(function (value, index, array) {
@@ -112,7 +124,28 @@ displayCurrentBalance(account1.movements);
 //     }
 //   });
 // };
-// checkDogs(dogsJulia, dogsKate);
+//? checkDogs(dogsJulia, dogsKate);
 // !Max value
-// console.log(movements.reduce((acc, mov) => (acc > mov ? acc : mov)));
-// console.log(Math.max(...movements))
+//? console.log(movements.reduce((acc, mov) => (acc > mov ? acc : mov)));
+//? console.log(Math.max(...movements))
+//! Code challenge #2
+// dogsKate = [5, 2, 4, 1, 15, 8, 3];
+// dogsJulia = [16, 6, 10, 5, 6, 1, 4];
+// const calcAverageHumanAge = function (ages) {
+//   let result = []; // Initialize result as an empty array
+//   let humanAge = [];
+//   ages.forEach(function (dogAge, index, array) {
+//     dogAge <= 2 ? humanAge.push(2 * dogAge) : humanAge.push(16 + dogAge * 4);
+//   });
+//   const adults = humanAge.filter((el) => el >= 18);
+//
+//   result.push(adults.reduce((acc, age, i, arr) => acc + age / arr.length, 0));
+//
+//   return [adults, Math.round(result[0])];
+// };
+
+//? console.log(calcAverageHumanAge([...dogsKate, ...dogsJulia]));
+// console.log(movements);
+// const euroToDollar = 1.1;
+// const convertToDollar = movements.map((money) => money * euroToDollar);
+// console.log(convertToDollar);
