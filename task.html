@@ -1,4 +1,108 @@
+// Виклик кодуванню #4
+
+/*
+Джулія та Кейт продовжують вивчати собак, і цього разу вони досліджують,чи їдять собаки забагато або замало.
+Якщо собака їсть забагато, це означає,
+що його поточна порція їжі більша за рекомендовану, а якщо замало - навпаки.
+Нормальна кількість означає,
+що поточна порція їжі собаки знаходиться в межах 10% вище і 10% нижче рекомендованої
+(див. підказку).
+
+1. Пройдіться циклом по масиву, що містить об'єкти собак,
+і для кожної собаки обчисліть рекомендовану порцію їжі та додайте її до об'єкта як нову властивість.
+НЕ створюйте новий масив, просто пройдіться по ньому циклом.
+Forumla: recommendedFood = weight ** 0.75 * 28. (Результат в грамах їжі, а вага повинна бути в кг)
+
+2. Знайдіть собаку Сари і виведіть на консоль,
+чи їсть вона забагато або замало їжі. Підказка: деякі собаки мають кількох власників,
+тому спочатку потрібно знайти Сару в масиві власників, і тому це завдання трохи складніше (навмисно) 🤓.
+
+3. Створіть масив, що містить усіх власників собак, які їдять забагато ('ownersEatTooMuch'),
+і масив з усіма власниками собак, які їдять замало ('ownersEatTooLittle').
+
+4. Для кожного масиву, створеного у пункті 3, виведіть у консоль рядок, наприклад,
+такий: "Собаки Матильди, Аліси та Боба їдять забагато!"
+та "Собаки Сари, Джона та Майкла їдять замало!"
+
+5. Виведіть на консоль інформацію про те, чи є собаки, які з'їдають саме ту кількість їжі,
+яка рекомендована (тільки true або false).
+
+6. Відмітьте на консолі, чи є собака, яка їсть НОРМАЛЬНУ кількість корму (лише "так" або "ні").
+
+7. Створіть масив, що містить собак, які їдять НОРМАЛЬНУ кількість їжі
+(спробуйте повторно використати умову,використану в пункті 6).
+
+8. Створіть поверхневу копію масиву собак і відсортуйте її за рекомендованою порцією їжі у
+порядку зростання (пам'ятайте, що порції знаходяться всередині об'єктів масиву).
+
+ПОРАДА 1: Використовуйте багато різних інструментів для вирішення цих завдань,
+ви можете скористатися короткою лекцією, щоб вибрати між ними 😉.
+ПОРАДА 2: Знаходження в межах діапазону на 10% вище
+і нижче рекомендованої порції означає: поточна > (рекомендована * 0.90) &&
+поточна < (рекомендована * 1.10).
+В основному, поточна порція повинна становити від 90% до 110% від рекомендованої.
+
+ТЕСТОВІ ДАНІ:
+const dogs = [
+{ weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+{ weight: 8, curFood: 200, owners: ['Matilda'] },
+{ weight: 13, curFood: 275, власники: ['Sarah', 'John'] },
+{ weight: 32, curFood: 340, власники: ['Michael'] }
+];
+
+ЩАСТИ 😀
+*/
+// Coding Challenge #4
+
+/*
+Julia and Kate are still studying dogs, and this time they are studying if dogs are eating too much or too little.
+Eating too much means the dog's current food portion is larger than the recommended portion, and eating too little is the opposite.
+Eating an okay amount means the dog's current food portion is within a range 10% above and 10% below the recommended portion (see hint).
+
+1. Loop over the array containing dog objects, and for each dog, calculate the recommended food portion and add it to the object as a new property. Do NOT create a new array, simply loop over the array. Forumla: recommendedFood = weight ** 0.75 * 28. (The result is in grams of food, and the weight needs to be in kg)
+2. Find Sarah's dog and log to the console whether it's eating too much or too little. HINT: Some dogs have multiple owners, so you first need to find Sarah in the owners array, and so this one is a bit tricky (on purpose) 🤓
+3. Create an array containing all owners of dogs who eat too much ('ownersEatTooMuch') and an array with all owners of dogs who eat too little ('ownersEatTooLittle').
+4. Log a string to the console for each array created in 3., like this: "Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+5. Log to the console whether there is any dog eating EXACTLY the amount of food that is recommended (just true or false)
+6. Log to the console whether there is any dog eating an OKAY amount of food (just true or false)
+7. Create an array containing the dogs that are eating an OKAY amount of food (try to reuse the condition used in 6.)
+8. Create a shallow copy of the dogs array and sort it by recommended food portion in an ascending order (keep in mind that the portions are inside the array's objects)
+
+HINT 1: Use many different tools to solve these challenges, you can use the summary lecture to choose between them 😉
+HINT 2: Being within a range 10% above and below the recommended portion means: current > (recommended * 0.90) && current < (recommended * 1.10). Basically, the current portion should be between 90% and 110% of the recommended portion.
+
+TEST DATA:
+const dogs = [
+{ weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+{ weight: 8, curFood: 200, owners: ['Matilda'] },
+{ weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+{ weight: 32, curFood: 340, owners: ['Michael'] }
+];
+
+GOOD LUCK 😀
+*/
+
+// Виклик кодуванню #3
+
+/*
+Перепишіть функцію 'calcAverageHumanAge' з попереднього завдання,
+але цього разу у вигляді стрілочної функції і з використанням ланцюжка!
+
+ТЕСТОВІ ДАНІ 1: [5, 2, 4, 1, 15, 8, 3].
+ТЕСТОВІ ДАНІ 2: [16, 6, 10, 5, 6, 1, 4].
+
+ЩАСТИ 😀
+// Coding Challenge #3
+
+/*
+Rewrite the 'calcAverageHumanAge' function from the previous challenge, but this time as an arrow function, and using chaining!
+
+TEST DATA 1: [5, 2, 4, 1, 15, 8, 3]
+TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
+
+GOOD LUCK 😀
 // Проблема кодування #2
+
 
 /*
 Повернімося до дослідження Джулії та Кейт про собак.

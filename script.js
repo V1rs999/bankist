@@ -36,6 +36,8 @@ const account4 = {
 const accounts = [account1, account2, account3, account4];
 
 // Elements
+const inputs = document.querySelectorAll("input");
+
 const labelWelcome = document.querySelector(".welcome");
 const labelDate = document.querySelector(".date");
 const labelBalance = document.querySelector(".balance__value");
@@ -71,12 +73,12 @@ const currencies = new Map([
   ["GBP", "Pound sterling"],
 ]);
 
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-
 /////////////////////////////////////////////////
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = "";
-  movements.forEach(function (value, index) {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  movs.forEach(function (value, index) {
     const type = value > 0 ? "deposit" : "withdrawal";
     const html = `
             <div class="movements__row">
@@ -90,12 +92,32 @@ const displayMovements = function (movements) {
     containerMovements.insertAdjacentHTML("afterbegin", html);
   });
 };
-displayMovements(account1.movements);
 
-const displayCurrentBalance = function (movements) {
-  labelBalance.textContent = movements.reduce((a, b) => a + b);
+const displayCurrentBalance = function (acc) {
+  acc.balance = labelBalance.textContent = acc.movements.reduce(
+    (a, b) => a + b
+  );
 };
-displayCurrentBalance(account1.movements);
+const displaySummary = function (acc) {
+  const sumIn = acc.movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, curr, i, arr) => acc + curr);
+  labelSumIn.textContent = `${sumIn} Euro`;
+
+  const sumOut = acc.movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, curr, i, arr) => acc + curr);
+  labelSumOut.textContent = `${Math.abs(sumOut)} Euro`;
+
+  const sumInterest = acc.movements
+    .filter((mov) => mov > 0)
+    .map((depp) => (depp * acc.interestRate) / 100)
+    .filter((int) => {
+      return int >= 1;
+    })
+    .reduce((acc, curr, i, arr) => acc + curr);
+  labelSumInterest.textContent = `${sumInterest} Euro`;
+};
 // !add property for object accounts "username"
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -107,7 +129,87 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
-console.log(accounts);
+// console.log(accounts);
+
+const updateUI = function (acc) {
+  displayMovements(acc.movements);
+  displayCurrentBalance(acc);
+  displaySummary(acc);
+  ClearInput();
+};
+const ClearInput = function () {
+  inputs.forEach((input) => {
+    input.value = "";
+    input.blur();
+  });
+};
+let currentAccount;
+btnLogin.addEventListener("click", function (e) {
+  e.preventDefault();
+  currentAccount = accounts.find(
+    (acc) => acc.username === inputLoginUsername.value
+  );
+  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(" ")[0]
+    }`;
+    containerApp.style.opacity = 100;
+    updateUI(currentAccount);
+  }
+});
+
+btnTransfer.addEventListener("click", (e) => {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiveAcc = accounts.find(
+    (acc) => acc.username === inputTransferTo.value
+  );
+  console.log(amount, receiveAcc);
+  if (
+    amount > 0 &&
+    currentAccount.balance > amount &&
+    receiveAcc?.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    receiveAcc.movements.push(amount);
+
+    updateUI(currentAccount);
+  }
+});
+btnLoan.addEventListener("click", (e) => {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((mov) => mov >= amount * 0.1)
+  ) {
+    //10%
+    currentAccount.movements.push(amount);
+    //Update Ui
+    updateUI(currentAccount);
+  }
+});
+btnClose.addEventListener("click", (e) => {
+  e.preventDefault();
+  const pin = Number(inputClosePin.value);
+  const username = inputCloseUsername.value;
+  if (currentAccount.pin === pin && username === currentAccount.username) {
+    const index = accounts.findIndex(
+      (acc) => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+    updateUI(currentAccount);
+  } else {
+    console.log("wrong data for user:", currentAccount.username);
+  }
+});
+let sorted = false;
+btnSort.addEventListener("click", (e) => {
+  e.preventDefault();
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
 //! Code challenge #1
 let dogsJulia = [3, 5, 2, 12, 7];
 let dogsKate = [4, 1, 15, 8, 3];
@@ -149,3 +251,117 @@ let dogsKate = [4, 1, 15, 8, 3];
 // const euroToDollar = 1.1;
 // const convertToDollar = movements.map((money) => money * euroToDollar);
 // console.log(convertToDollar);
+
+// !Code Challenge #3
+// const calcAverageHumanAge = (ages) => {
+//   return ages
+//     .map((age) => (age <= 2 ? 2 * age : 16 + age * 4))
+//     .filter((age) => age >= 18)
+//     .reduce((acc, age, i, arr) => acc + age / arr.length, 0);
+// };
+// // const avg1 = calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
+// // const avg2 = calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+// //? console.log(avg1, avg2);
+// const account = accounts.find((el) => el.owner === "Steven Thomas Williams");
+// //? console.log(account);
+
+// !Code Challenge #4
+const dogs = [
+  { weight: 22, curFood: 250, owners: ["Alice", "Bob"] },
+  { weight: 8, curFood: 200, owners: ["Matilda"] },
+  { weight: 13, curFood: 275, owners: ["Sarah", "John"] },
+  { weight: 32, curFood: 340, owners: ["Michael"] },
+];
+
+// !______________________________________________1 TASK____________________________________________________
+// *first example
+// dogs.map(function (value, index, array) {
+//   return Object.assign(value, {
+//     recommendedFood: `${Math.round(value.weight ** 0.75 * 28)} G`,
+//   });
+// });
+// *second example
+dogs.forEach((dog) => {
+  dog.recommendedFood = Math.trunc(dog.weight ** 0.75 * 28);
+  // this part isn't include in code challenge
+  const currentFood = dog.curFood;
+  const lowerBound = dog.recommendedFood * 0.9;
+  const upperBound = dog.recommendedFood * 1.1;
+
+  if (currentFood > lowerBound && currentFood < upperBound) {
+    console.log(`${dog.owners.join(", ")}'normal`);
+  } else {
+    console.log(`${dog.owners.join(", ")}'wrong`);
+  }
+});
+
+// console.log(dogs);
+//
+// !______________________________________________2 TASK____________________________________________________
+const owner = function (name) {
+  const ownerDog = dogs.find((value) => value.owners.includes(name));
+  return ownerDog.curFood > ownerDog.recommendedFood
+    ? "too much"
+    : "too little";
+};
+console.log("Sarah's dog eat: ", owner("Sarah"));
+
+// !______________________________________________3 TASK____________________________________________________
+const ownersEatTooMuch = () => {
+  return dogs
+    .filter((owner) => owner.curFood > owner.recommendedFood)
+    .map((owner) => owner.owners)
+    .flat();
+};
+const ownersEatTooLittle = () => {
+  return dogs
+    .filter((owner) => owner.curFood < owner.recommendedFood)
+    .map((owner) => owner.owners)
+    .flat();
+};
+
+console.log("Власники, собак які їдять забагато:", ownersEatTooMuch());
+console.log("Власники, собак які їдять замало:", ownersEatTooLittle());
+// !______________________________________________4 TASK____________________________________________________
+const ownersEatTooMuchString = () => {
+  const ownersTooMuch = ownersEatTooMuch();
+  return ownersTooMuch.join(" and ") + "'s dogs eat too much!";
+};
+const ownersEatTooLittleString = () => {
+  const ownersTooLittle = ownersEatTooLittle();
+  return ownersTooLittle.join(" and ") + "'s dogs eat too little!";
+};
+console.log(ownersEatTooMuchString());
+console.log(ownersEatTooLittleString());
+// Matilda and Alice and Bob's dogs eat too much!
+// !______________________________________________'5' && '6' TASK____________________________________________________
+const eatSomeRecommendedFood = () => {
+  return dogs.some((value, index, array) => {
+    const currentFood = value.curFood;
+    const lowerBound = value.recommendedFood * 0.9;
+    const upperBound = value.recommendedFood * 1.1;
+    return currentFood < upperBound && currentFood > lowerBound;
+  });
+};
+console.log(eatSomeRecommendedFood());
+// !______________________________________________7 TASK____________________________________________________
+const eatNormalRecommendedFood = () => {
+  const result = [];
+  dogs.some((value, index, array) => {
+    const currentFood = value.curFood;
+    const lowerBound = value.recommendedFood * 0.9;
+    const upperBound = value.recommendedFood * 1.1;
+    if (currentFood > lowerBound && currentFood < upperBound) {
+      result.push(value.owners[0]);
+    }
+  });
+  return result;
+};
+console.log(eatNormalRecommendedFood());
+// !______________________________________________8 TASK____________________________________________________
+const copyDogSort = () => {
+  return dogs.slice().sort((a, b) => {
+    return a.recommendedFood - b.recommendedFood;
+  });
+};
+console.log(copyDogSort());
